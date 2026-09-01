@@ -1,0 +1,397 @@
+/* LeaveBy landing page. Shares design tokens with the app stylesheet. */
+
+:root {
+  --cream: #FFF8F0;
+  --ink: #1A1D26;
+  --accent: #FF7A1A;
+  --green: #2FB56B;
+  --warn: #FFA114;
+  --red: #E5484D;
+  --radius: 20px;
+  --surface: #FFFFFF;
+  --line: rgba(26, 29, 38, 0.14);
+  --muted: rgba(26, 29, 38, 0.68);
+  --font: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+h1, h2, h3 {
+  margin: 0 0 0.4em;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+p { margin: 0 0 1em; }
+
+a { color: var(--ink); }
+
+.wrap {
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+section { padding: 44px 0; }
+
+section h2 {
+  font-size: clamp(1.5rem, 5.5vw, 2rem);
+  margin-bottom: 20px;
+}
+
+/* ---------- hero ---------- */
+
+.hero { padding-top: 34px; }
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.hero h1 {
+  font-size: clamp(2.1rem, 8.2vw, 3.5rem);
+  max-width: 15ch;
+}
+
+.sub {
+  font-size: clamp(1.05rem, 3.6vw, 1.3rem);
+  color: var(--muted);
+  max-width: 34ch;
+  margin-bottom: 26px;
+}
+
+.cta {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--ink);
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-decoration: none;
+  padding: 18px 32px;
+  border-radius: var(--radius);
+  border: 3px solid var(--ink);
+  box-shadow: 0 6px 0 var(--ink);
+}
+
+.cta:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--ink); }
+.cta:active { transform: translateY(6px); box-shadow: 0 0 0 var(--ink); }
+
+.cta-note {
+  margin-top: 14px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* ---------- the looping demo (pure CSS, no script) ---------- */
+
+.demo {
+  position: relative;
+  background: var(--surface);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 18px 18px 74px; /* the bottom band is the flash message lane, kept clear so nothing jumps */
+  box-shadow: 0 10px 0 rgba(26, 29, 38, 0.10);
+  overflow: hidden;
+}
+
+.demo-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.demo-chip {
+  background: var(--cream);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+.demo-count {
+  position: relative;
+  display: block;
+  width: 5em;
+  height: 1.5em;
+  color: var(--muted);
+}
+
+.demo-count span {
+  position: absolute;
+  inset: 0;
+  text-align: right;
+  opacity: 0;
+  animation: demoStep 12s infinite;
+}
+
+.demo-count span:nth-child(2) { animation-delay: 4s; }
+.demo-count span:nth-child(3) { animation-delay: 8s; }
+
+.demo-stage {
+  position: relative;
+  height: 200px;
+  margin: 10px 0 18px;
+}
+
+.demo-step {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  opacity: 0;
+  animation: demoStep 12s infinite;
+}
+
+.demo-step-2 { animation-delay: 4s; }
+.demo-step-3 { animation-delay: 8s; }
+
+.demo-emoji { font-size: 84px; line-height: 1; }
+
+.demo-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.demo-bar {
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(26, 29, 38, 0.10);
+  overflow: hidden;
+}
+
+.demo-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--green);
+  animation: demoDrain 4s linear infinite;
+}
+
+.demo-tap {
+  margin: 12px 0 0;
+  text-align: center;
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.demo-flash {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  margin: 0;
+  background: var(--warn);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-weight: 800;
+  text-align: center;
+  opacity: 0;
+  animation: demoFlash 12s infinite;
+}
+
+/* Three 4s segments inside one 12s loop. The fade out of one card ends exactly
+   where the next card's fade in begins (33.33% = 4s), so the card never goes blank. */
+@keyframes demoStep {
+  0%      { opacity: 0; transform: translateY(14px) scale(0.94); }
+  2%, 32% { opacity: 1; transform: none; }
+  33.33%  { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  100%    { opacity: 0; transform: translateY(-8px) scale(0.98); }
+}
+
+@keyframes demoDrain {
+  0%   { width: 100%; background: var(--green); }
+  55%  { width: 45%;  background: var(--green); }
+  72%  { width: 28%;  background: var(--warn); }
+  90%  { width: 10%;  background: var(--red); }
+  100% { width: 4%;   background: var(--red); }
+}
+
+@keyframes demoFlash {
+  0%, 70%  { opacity: 0; transform: translateY(8px); }
+  73%, 88% { opacity: 1; transform: none; }
+  92%, 100% { opacity: 0; transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-step, .demo-count span, .demo-fill, .demo-flash { animation: none; }
+  .demo-step-1, .demo-count span:first-child { opacity: 1; }
+  .demo-step-2, .demo-step-3, .demo-count span:not(:first-child) { display: none; }
+  .demo-fill { width: 42%; background: var(--warn); }
+  .demo-flash { opacity: 1; }
+  .cta:hover, .cta:active { transform: none; box-shadow: 0 6px 0 var(--ink); }
+}
+
+/* ---------- the trick ---------- */
+
+.trick-list {
+  list-style: none;
+  counter-reset: t;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.trick-list li {
+  counter-increment: t;
+  position: relative;
+  padding-left: 46px;
+  font-size: clamp(1.05rem, 3.4vw, 1.25rem);
+  font-weight: 600;
+  max-width: 46ch;
+}
+
+.trick-list li::before {
+  content: counter(t);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+/* ---------- how it works ---------- */
+
+.how-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.card {
+  background: var(--surface);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: 0 6px 0 rgba(26, 29, 38, 0.10);
+}
+
+.card h3 { font-size: 1.25rem; }
+.card p { margin: 0; color: var(--muted); }
+
+.num {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+/* ---------- what this is not ---------- */
+
+.not { padding-bottom: 52px; }
+
+.not-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  max-width: 48ch;
+}
+
+.not-list li {
+  position: relative;
+  padding-left: 34px;
+  color: var(--ink);
+}
+
+.not-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--red);
+}
+
+/* ---------- footer ---------- */
+
+footer {
+  border-top: 3px solid var(--ink);
+  padding: 26px 0 40px;
+}
+
+.foot-line { font-weight: 700; margin-bottom: 8px; }
+
+.foot-links {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+}
+
+.foot-links a { color: var(--muted); text-underline-offset: 3px; }
+.foot-links a:hover { color: var(--accent); }
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---------- wider screens ---------- */
+
+@media (min-width: 760px) {
+  body { font-size: 18px; }
+  section { padding: 60px 0; }
+  .hero { padding-top: 56px; }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .demo-stage { height: 230px; }
+  .demo-emoji { font-size: 100px; }
+  .how-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  .foot-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+  }
+  .foot-line { margin-bottom: 0; }
+}

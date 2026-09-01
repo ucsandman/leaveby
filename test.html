@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>LeaveBy - schedule core tests</title>
+<style>
+  :root {
+    --cream: #FFF8F0;
+    --ink: #1A1D26;
+    --sunrise: #FF7A1A;
+    --green: #2FB56B;
+    --red: #E5484D;
+    --radius: 20px;
+  }
+  body {
+    margin: 0;
+    padding: 32px 20px;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  main { max-width: 720px; margin: 0 auto; }
+  h1 {
+    font-size: 20px;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .sub { margin: 0 0 24px; opacity: 0.6; font-size: 14px; }
+  #verdict {
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  #verdict.pass { background: var(--green); }
+  #verdict.fail { background: var(--red); }
+  #verdict .count {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    opacity: 0.9;
+    margin-top: 6px;
+    letter-spacing: 0;
+  }
+  #detail {
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  #detail li {
+    background: #fff;
+    border-left: 5px solid var(--red);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  footer {
+    margin-top: 28px;
+    font-size: 13px;
+    opacity: 0.6;
+  }
+  footer code { color: var(--sunrise); }
+</style>
+</head>
+<body>
+<main>
+  <h1>LeaveBy schedule core</h1>
+  <p class="sub">The same asserts that run under Node, run here in the browser.</p>
+  <div id="verdict">Running...</div>
+  <ul id="detail"></ul>
+  <footer>Node equivalent: <code>node js/schedule.test.js</code></footer>
+</main>
+
+<script src="js/schedule.js"></script>
+<script src="js/schedule.test.js"></script>
+<script>
+(function () {
+  var el = document.getElementById('verdict');
+  var detail = document.getElementById('detail');
+  var r = window.ScheduleTestResults;
+
+  if (!r) {
+    el.className = 'fail';
+    el.textContent = 'FAIL';
+    el.innerHTML += '<span class="count">0 asserts executed - the test file did not run</span>';
+    return;
+  }
+
+  var n = r.asserts + ' asserts executed';
+
+  if (!r.failures.length) {
+    el.className = 'pass';
+    el.textContent = 'PASS';
+    el.innerHTML += '<span class="count">' + n + '</span>';
+    return;
+  }
+
+  el.className = 'fail';
+  el.textContent = 'FAIL';
+  el.innerHTML += '<span class="count">' + r.failures.length + ' of ' + n + ' failed</span>';
+  for (var i = 0; i < r.failures.length; i++) {
+    var li = document.createElement('li');
+    li.textContent = r.failures[i];
+    detail.appendChild(li);
+  }
+})();
+</script>
+</body>
+</html>

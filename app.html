@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>LeaveBy</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body class="mode-setup">
+
+<!-- ================= SETUP ================= -->
+<section id="setup" class="screen">
+  <header class="hd">
+    <h1>LeaveBy</h1>
+    <p class="tag">The morning routine that counts backwards from the door.</p>
+  </header>
+
+  <p id="linkBanner" class="banner" hidden>This routine arrived from a link.</p>
+  <p id="storageWarn" class="banner warnBanner" hidden>This browser is blocking storage, so the routine will not survive closing the page.</p>
+
+  <div class="panel">
+    <label class="field" for="leaveAt">
+      <span class="fieldLabel">Out the door at</span>
+      <input type="time" id="leaveAt" value="07:45">
+    </label>
+    <p id="planLine" class="planLine"></p>
+  </div>
+
+  <ol id="stepList" class="steps"></ol>
+
+  <button type="button" id="addStep" class="btn ghost">+ Add a step</button>
+  <button type="button" id="start" class="btn primary big">Start the morning</button>
+
+  <p id="setupStats" class="setupStats"></p>
+</section>
+
+<!-- ================= KID ================= -->
+<section id="kid" class="screen">
+  <button type="button" id="back" class="back" aria-label="Undo the last step">&#8630;</button>
+  <p id="flash" class="flash" role="status" aria-live="polite" hidden></p>
+  <button type="button" id="card" class="card status-green">
+    <span id="hurry" class="hurry" hidden>Hurry!</span>
+    <span id="cardEmoji" class="emoji" aria-hidden="true"></span>
+    <span id="cardName" class="name"></span>
+    <span class="barwrap"><span id="bar" class="bar"></span></span>
+    <span id="cardMeta" class="meta"></span>
+  </button>
+</section>
+
+<!-- ================= FINISH ================= -->
+<section id="finish" class="screen">
+  <div id="confetti" class="confetti" aria-hidden="true"></div>
+  <div class="finishInner">
+    <h2 class="finishTitle">Out the door!</h2>
+    <p class="bankLabel">Minutes banked</p>
+    <p id="bank" class="bank">0</p>
+    <p id="streak" class="streak"></p>
+    <ul id="recap" class="recap"></ul>
+    <button type="button" id="useReal" class="btn" hidden>Use real times</button>
+    <button type="button" id="share" class="btn">Share this routine</button>
+    <input id="shareUrl" class="shareUrl" readonly hidden aria-label="Routine link">
+    <p id="copied" class="copied" hidden>Link copied.</p>
+    <button type="button" id="again" class="btn primary">Do it again tomorrow</button>
+  </div>
+</section>
+
+<script src="js/schedule.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
