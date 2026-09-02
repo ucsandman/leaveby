@@ -1,0 +1,29 @@
+# LeaveBy
+
+LeaveBy is a free web page for parents of young kids to run the morning routine. Set the time you need to leave and the list of steps once, then hand the screen to your kid. Each step fills the whole screen with a giant emoji and a bar that drains toward that step's real deadline, counted backwards from when you need to be out the door. If the morning falls behind, LeaveBy drops optional steps and tells the kid which one got skipped and why. Finish early and the extra minutes get banked, building a streak of on-time mornings.
+
+## Who it is for
+
+Parents of young kids who want a calmer, more consistent morning routine on one shared device, like a phone or tablet propped on the kitchen counter.
+
+## What it does
+
+- Counts backwards from the leave time instead of counting up from the start, so every step's deadline is based on when you actually have to be out the door.
+- Recomputes on every tick, so a late start eats into what is left instead of breaking the plan.
+- Drops optional steps one at a time when the math goes negative, and tells the kid which step got skipped and why.
+- Banks the extra minutes when a step finishes early and tracks a streak of on-time mornings.
+- Generates a share link so someone else can start from the same routine. The link is a copy, not a live sync to the original.
+
+## Pricing
+
+Free. No account, no subscription, no download.
+
+## Pages
+
+- https://ucsandman.github.io/leaveby/ - Landing page with the pitch and a link to start the routine.
+- https://ucsandman.github.io/leaveby/app.html - The app itself: set the leave time and steps, then run kid mode.
+- https://ucsandman.github.io/leaveby/test.html - Automated tests for the scheduling math (not indexed).
+
+## Source
+
+https://github.com/ucsandman/leaveby (MIT licensed)
