@@ -38,13 +38,8 @@
 
   // localStorage is as untrusted as a share link: normalize or fall back.
   var routine = S.normalizeRoutine(loadJSON(KEY.routine, null)) || STARTER;
-  var run = loadJSON(KEY.run, null);
-  // A run older than 12h is yesterday's abandoned morning, not a resume.
-  if (run && (typeof run.startedAt !== 'number' || !Array.isArray(run.done) ||
-      Date.now() - run.startedAt > 12 * 3600000)) {
-    run = null;
-    drop(KEY.run);
-  }
+  var run = S.normalizeRun(loadJSON(KEY.run, null), routine, Date.now());
+  if (!run) drop(KEY.run);
   var stats = loadJSON(KEY.stats, null) ||
     { bankedMin: 0, streak: 0, lastOnTimeDate: null, lastRunDate: null };
 

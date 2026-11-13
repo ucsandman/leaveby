@@ -56,7 +56,7 @@
     var steps = (routine && routine.steps) || [];
     var done = (runState && runState.done) || [];
 
-    var doneIds = {};
+    var doneIds = Object.create(null);
     for (var i = 0; i < done.length; i++) doneIds[done[i].id] = true;
 
     // Anchored to the morning the run STARTED, so a run left open past the
@@ -183,10 +183,12 @@
     if (!Array.isArray(raw.steps) || !raw.steps.length) return null;
 
     var steps = [];
+    var ids = Object.create(null);
     for (var i = 0; i < raw.steps.length && steps.length < MAX_STEPS; i++) {
       var s = raw.steps[i];
       if (!s || typeof s !== 'object') return null;
-      if (typeof s.id !== 'string' || !s.id) return null;
+      if (typeof s.id !== 'string' || !s.id || ids[s.id]) return null;
+      ids[s.id] = true;
       if (typeof s.name !== 'string' || !s.name) return null;
       if (typeof s.emoji !== 'string') return null;
       var mins = Number(s.minutes);
@@ -202,10 +204,34 @@
     return { v: 1, leaveAt: raw.leaveAt, steps: steps };
   }
 
+  // A stored run may be incomplete, corrupt, or belong to an edited routine.
+  // Reject it as a whole rather than inventing progress or timing evidence.
+  function normalizeRun(raw, routine, now) {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw) ||
+        typeof raw.startedAt !== 'number' || !isFinite(raw.startedAt) ||
+        raw.startedAt > now || now - raw.startedAt > 12 * 3600000 ||
+        !Array.isArray(raw.done) || raw.done.length > routine.steps.length) return null;
+    var ids = Object.create(null);
+    routine.steps.forEach(function (s) { ids[s.id] = true; });
+    var seen = Object.create(null);
+    var prev = raw.startedAt;
+    var done = [];
+    for (var i = 0; i < raw.done.length; i++) {
+      var entry = raw.done[i];
+      if (!entry || typeof entry.id !== 'string' || !ids[entry.id] || seen[entry.id] ||
+          typeof entry.at !== 'number' || !isFinite(entry.at) ||
+          entry.at < prev || entry.at > now) return null;
+      seen[entry.id] = true;
+      done.push({ id: entry.id, at: entry.at });
+      prev = entry.at;
+    }
+    return { startedAt: raw.startedAt, done: done };
+  }
+
   /* ---------- afterwards ---------- */
 
   function recap(routine, runState) {
-    var byId = {};
+    var byId = Object.create(null);
     var steps = (routine && routine.steps) || [];
     for (var i = 0; i < steps.length; i++) byId[steps[i].id] = steps[i];
 
@@ -246,6 +272,7 @@
     encodeRoutine: encodeRoutine,
     decodeRoutine: decodeRoutine,
     normalizeRoutine: normalizeRoutine,
+    normalizeRun: normalizeRun,
     recap: recap
   };
 

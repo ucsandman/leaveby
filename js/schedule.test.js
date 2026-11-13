@@ -406,6 +406,28 @@
     eq(r.earlyMin, 0, 'finishing late banks 0 minutes, never a negative');
   });
 
+  group('step identity stays exact', function () {
+    var special = { v: 1, leaveAt: '08:00', steps: [step('constructor', 'x', 'Shoes', 5, false), step('__proto__', 'x', 'Coat', 2, false)] };
+    var run = { startedAt: at(7, 30), done: [] };
+    eq(S.tick(special, run, at(7, 30)).remainingCount, 2, 'prototype names are real steps, not completed entries');
+    var duplicate = { v: 1, leaveAt: '08:00', steps: [step('same', 'x', 'Shoes', 5, false), step('same', 'x', 'Coat', 2, false)] };
+    eq(S.normalizeRoutine(duplicate), null, 'duplicate IDs cannot silently complete two steps with one tap');
+  });
+
+  group('saved runs are validated before resuming', function () {
+    var good = { startedAt: at(7, 30), done: [{ id: 'a', at: at(7, 35) }] };
+    jeq(S.normalizeRun(good, A, at(7, 40)), good, 'valid saved morning resumes');
+    [null, {}, { startedAt: at(7, 30), done: [null] },
+      { startedAt: at(7, 30), done: [{ id: 'unknown', at: at(7, 35) }] },
+      { startedAt: at(7, 30), done: [{ id: 'a', at: at(7, 35) }, { id: 'a', at: at(7, 36) }] },
+      { startedAt: at(7, 30), done: [{ id: 'a', at: at(7, 29) }] },
+      { startedAt: at(7, 30), done: [{ id: 'a', at: at(7, 41) }] },
+      { startedAt: at(7, 41), done: [] },
+      { startedAt: NaN, done: [] },
+      { startedAt: at(7, 30) - 13 * 3600000, done: [] }
+    ].forEach(function (bad, i) { eq(S.normalizeRun(bad, A, at(7, 40)), null, 'reject invalid saved run ' + i); });
+  });
+
   /* ---------- report ---------- */
   var results = { asserts: asserts, failures: failures };
 
